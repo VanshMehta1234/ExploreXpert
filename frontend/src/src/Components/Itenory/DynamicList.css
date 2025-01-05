@@ -1,0 +1,68 @@
+.iteminfo{
+    margin-bottom: 10px;
+  }
+
+  .container-display-page5{
+ display: flex;
+ justify-content: center;
+ align-self: center;
+
+}
+
+.card-display-page5{
+  background-color: #FFF6E9;
+  color: black;
+  min-width: 40vw;
+  border-radius: 10px;
+  margin:5% 10%;
+}
+
+.card-display-title-page5{
+  font-size: 1rem;
+  color:black;
+}
+
+.card-display-text-page5{
+  font-size: 1rem;
+  margin-top: 2%;
+  color: black;
+  margin-bottom: 2%;
+}
+
+.card-display-text-page5 p{
+  font-size: 1rem;
+  color: black;
+}
+
+.card-display-button-page5{
+  background-color: #201658;
+  border-radius: 5%;
+}
+
+.card-display-button-container-page5{
+  display: flex;
+  flex-direction: column;
+  row-gap: 5%;
+   justify-content: space-around;
+   position: relative;
+}
+
+
+.card-inner-page5{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+
+.icon-container {
+  position: relative;
+  cursor: pointer; /* Add pointer cursor on hover to indicate interactivity */
+}
+
+.timing-info-page5{
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  
+}

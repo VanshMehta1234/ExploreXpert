@@ -1,0 +1,401 @@
+.main {
+    display: flex;
+    flex-direction: row;
+    margin: auto;
+    height: 450px;
+    max-width: 1100px;
+    margin: 40px 20px;
+}
+
+.container-main-page1{
+    position: relative;
+    overflow: hidden;
+}
+
+.container-main-page1::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(10px); /* Increased blur amount */
+    background: lightblue; /* Gradient colors shifted to blue */
+    z-index: -3;
+}
+
+.main_back {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow: hidden;
+    background-size: cover;
+    background-color: lightblue;
+    backdrop-filter: blur(10px); /* Increased blur amount */
+}
+
+
+
+.conform-text {
+    font-size: 1.5rem;
+    font-style: italic;
+    color: #AC7D88;
+}
+.left-side {
+    position: relative;
+    width: 40rem;
+    background-image: url('../Assets/travel_world.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    margin-top: 20px;
+    overflow: hidden;
+    background-size: cover;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+}
+
+.left-side::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(100px); /* Increased blur amount */
+    z-index:-1; /* Adjusted z-index */
+}
+
+.left-side .content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: white;
+    z-index: 1; /* Adjusted z-index */
+}
+
+/* Adjust font size, weight, etc. for your preference */
+.left-side .content h2 {
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+}
+
+.left-side .content p {
+    font-size: 18px;
+    font-weight: normal;
+}
+
+
+
+.right-container {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    margin-top: 20px;
+    /* background-color: rgba(255, 255, 255, 0.5); */
+    width: 100%;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+.action-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 9px;
+    width: 100%;
+    margin-top: 15px;
+}
+
+.text-action-main {
+    color: #3E3232;
+    font-size: 35px;
+    font-weight: 700px;
+    margin-bottom: 10px;
+}
+
+.right-inputs {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 23px;
+    height: auto;
+}
+
+.input {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 80%;
+    border-radius: 8px;
+    border: 1px solid cadetblue;
+}
+
+.input img {
+    margin: 10px 20px;
+}
+
+.input input {
+    height: 45px;
+    width: 100%;
+    background: transparent !important;
+    border: none;
+    outline: none;
+    color: black;
+}
+
+.forgot-password-text {
+    padding-left: 20px;
+    margin-top: 15px;
+    color: #3E3232;
+    font-size: 18px;
+}
+
+.forgot-password-text span {
+    color: darkblue;
+    cursor: pointer;
+}
+
+.submit-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin: 20px auto;
+}
+
+.submit-container-left {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    margin: 20px auto;
+}
+
+.submit-container-right {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    gap: 20px;
+    margin: 20px auto;
+}
+
+
+.submit {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 10rem;
+    height: 45px;
+    color: #fff;
+    background: darkblue;
+    border-radius: 50px;
+    font-size: 19px;
+    font-weight: 700;
+    cursor: pointer;
+    border: 1px solid cadetblue;
+}
+
+.passset {
+    width: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.gray {
+    background: #fff;
+    color: black ;
+}
+
+
+.password-reset-container {
+    display: flex;
+    row-gap: 16px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* Center vertically */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    width: 90%;
+    max-width: 400px;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.password-reset-container h2 {
+    color: #3E3232;
+    font-size: 30px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.password-reset-container .input {
+    margin-bottom: 15px;
+}
+
+.password-reset-container input {
+    height: 45px;
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #797979;
+    font-size: 19px;
+}
+
+.password-reset-container button {
+    width: 100%;
+    max-width: 200px;
+    padding: 10px;
+    background-color:darkblue;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.password-reset-container button:hover {
+    background-color: lightblue;
+    color: black;
+}
+
+.submit-reset-button-page1{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+}
+
+/* Media query for smaller screens */
+@media screen and (max-width: 768px) {
+    .password-reset-container {
+        width: 80%; /* Adjust width as needed */
+    }
+}
+
+/* Media query for larger screens */
+@media screen and (min-width: 1200px) {
+    .password-reset-container {
+        width: 50%; /* Adjust width as needed */
+    }
+}
+
+
+
+/* Media query for smaller screens */
+
+@media screen and (max-width: 1150px) and (min-width:890px) {
+
+    .main{
+        width:800px;
+    }
+    
+    .input {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        width: 90%;
+        border-radius: 8px;
+        border: 1px solid cadetblue;
+    }
+
+
+}
+
+
+@media screen and (min-width: 1150px) and (max-width:1300px) {
+
+    .main{
+        width:1000px;
+    }
+
+    .input {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        width: 90%;
+        border-radius: 8px;
+        border: 1px solid cadetblue;
+    }
+
+}
+
+
+@media screen and (max-width: 450px) and (min-width:0px) {
+   
+    .submit-container-left{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .submit-container-left {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        margin: auto 20px;
+    }
+
+    .input {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        width: 90%;
+        border-radius: 8px;
+        border: 1px solid cadetblue;
+    }
+
+}
+
+@media screen and (max-width: 890px) and (min-width: 0px) {
+    .submit-container-left{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .left-side {
+        width: 0;
+        display: none; /* Hide the left side */
+    }
+
+    .right-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 500px; /* Define a maximum width */
+        margin: 0 auto; /* Center horizontally */
+        border-radius: 20px;
+    }
+
+    .main {
+        display: flex;
+        flex-direction: row;
+        justify-content: center; /* Center the contents horizontally */
+        align-items: center; /* Center the contents vertically */
+        height: 450px;
+        width: 90%; /* Adjust percentage as per your preference */
+        max-width: 1100px;
+        margin: 40px auto; /* Center the .main container horizontally */
+    }
+
+    .input {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        width: 90%;
+        border-radius: 8px;
+        border: 1px solid cadetblue;
+    }
+}
+
+
