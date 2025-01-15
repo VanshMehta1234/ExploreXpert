@@ -69,3 +69,10 @@ public/workbox-*.js
 
 # TypeScript
 *.tsbuildinfo
+
+# VS Code specific
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json

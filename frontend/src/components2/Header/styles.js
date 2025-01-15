@@ -1,4 +1,4 @@
-import { alpha, styled } from '@mui/material/styles';
+import { alpha, styled } from '@mui/system';
 
 export default styled((theme) => ({
   title: {
