@@ -1,5 +1,10 @@
 const express = require('express');
 const router = express.Router();
+const { clerkAuth, addUserData } = require('../middleware/auth.middleware');
+
+// Apply Clerk authentication to all routes
+router.use(clerkAuth);
+router.use(addUserData);
 
 const getPlacelocation = require("../controllers/User-Api-Controller/getLocation");
 const getImage=require('../controllers/User-Api-Controller/getImage');
@@ -46,7 +51,15 @@ router
 
 router
     .route('/getSelectedItem')
-    .get(verifyToken,getSelectedItem);
+    .get(async (req, res) => {
+        try {
+            const user = await User.findOne({ clerkId: req.userId });
+            // ... rest of your logic
+        } catch (error) {
+            console.error('Error:', error);
+            res.status(500).json({ error: 'Internal server error' });
+        }
+    });
 
 router
     .route('/getSelectedFavPlaces')

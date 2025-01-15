@@ -1,23 +1,18 @@
 import axios from 'axios';
 
-export const getPlacesData = async(type, sw, ne) => {
+export const getPlacesData = async (type, sw, ne) => {
     try {
-        const { data: { data } } = await axios.get(`https://travel-advisor.p.rapidapi.com/${type}/list-in-boundary`, {
+        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/places`, {
             params: {
-                bl_latitude: sw.lat,
-                bl_longitude: sw.lng,
-                tr_longitude: ne.lng,
-                tr_latitude: ne.lat,
-            },
-            headers: {
-                'x-rapidapi-key': '82e098f605msh94314169e440b79p13d164jsnd8d68c757dc7',
-                'x-rapidapi-host': 'travel-advisor.p.rapidapi.com',
-            },
+                type,
+                sw: `${sw.lat},${sw.lng}`,
+                ne: `${ne.lat},${ne.lng}`,
+            }
         });
-
-        return data;
+        return response.data;
     } catch (error) {
-        console.log(error);
+        console.error('Error fetching places:', error);
+        return [];
     }
 };
 

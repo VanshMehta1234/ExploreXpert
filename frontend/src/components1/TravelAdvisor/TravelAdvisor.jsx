@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { CssBaseline, Grid ,Button} from '@mui/material';
+import { CssBaseline, Grid, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { getPlacesData, getWeatherData } from '../../api/travelAdvisorAPI';
 import { MapContainer, TileLayer } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
+import { useUser } from '@clerk/clerk-react';
 
 import Header from '../../Components/Header/Header.jsx';
 import List from '../List/List';
@@ -12,15 +13,13 @@ import Map from '../Map/Map';
 import axios from 'axios';
 
 const App = () => {
+  const { user } = useUser();
   const [type, setType] = useState('restaurants');
   const [rating, setRating] = useState('');
-
-  const [coords, setCoords] = useState({});
+  const [coords, setCoords] = useState({ lat: 0, lng: 0 });
   const [bounds, setBounds] = useState(null);
-
   const [filteredPlaces, setFilteredPlaces] = useState([]);
   const [places, setPlaces] = useState([]);
-
   const [autocomplete, setAutocomplete] = useState(null);
   const [childClicked, setChildClicked] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -30,48 +29,44 @@ const App = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          console.error('No token found');
-          return;
-        }
-        const headers = {
-          'Authorization': 'Bearer ' + token,
-          'Content-Type': 'application/json'
-        };
-        const response = await axios.get('http://localhost:3001/user/api/getSelectedItem', { headers });
+        if (!user) return;
+
+        const response = await axios.get('http://localhost:3001/user/api/getSelectedItem', {
+          headers: {
+            'Authorization': `Bearer ${await user.getToken()}`,
+            'Content-Type': 'application/json'
+          }
+        });
         
-        if (response.status === 200) {
+        if (response.status === 200 && response.data.data) {
           const data = response.data.data;
           console.log('User data fetched successfully:', data);
           
           if (data.selectedItems && data.selectedItems.length > 0) {
             const latitude = parseFloat(data.selectedItems[0].lat);
             const longitude = parseFloat(data.selectedItems[0].lon);
-            setCoords({ lat: latitude, lng: longitude });
-          } else {
-            console.error('No selected items found in the response:', data);
+            if (!isNaN(latitude) && !isNaN(longitude)) {
+              setCoords({ lat: latitude, lng: longitude });
+            }
           }
-        } else {
-          console.error('Failed to fetch user data:', response.data.error);
         }
       } catch (error) {
-        console.error('Error:', error);
+        console.error('Error fetching user data:', error);
+        navigator.geolocation.getCurrentPosition(({ coords: { latitude, longitude } }) => {
+          setCoords({ lat: latitude, lng: longitude });
+        });
       }
     };
     
     fetchData();
-  }, []); 
-    
-  useEffect(() => {
-    console.log('Coordinates set:', coords);
-    // You can perform additional actions based on the updated coords here
-  }, [coords]);
+  }, [user]); 
 
   useEffect(() => {
-    const filtered = places.filter((place) => Number(place.rating) > rating);
-    setFilteredPlaces(filtered);
-  }, [rating]);
+    if (places && places.length > 0) {
+      const filtered = places.filter((place) => Number(place.rating) > rating);
+      setFilteredPlaces(filtered);
+    }
+  }, [rating, places]);
 
   useEffect(() => {
     if (bounds) {
@@ -79,10 +74,18 @@ const App = () => {
 
       getPlacesData(type, bounds.sw, bounds.ne)
         .then((data) => {
-          setPlaces(data.filter((place) => place.name && place.num_reviews > 0));
-          console.log(places);
-          setFilteredPlaces([]);
-          setRating('');
+          if (data) {
+            const validPlaces = data.filter((place) => place && place.name && place.num_reviews > 0);
+            setPlaces(validPlaces);
+            setFilteredPlaces([]);
+            setRating('');
+          }
+        })
+        .catch((error) => {
+          console.error('Error fetching places:', error);
+          toast.error('Error fetching places data');
+        })
+        .finally(() => {
           setIsLoading(false);
         });
     }
@@ -91,9 +94,14 @@ const App = () => {
   const onLoad = (autoC) => setAutocomplete(autoC);
 
   const onPlaceChanged = () => {
-    const lat = autocomplete.getPlace().geometry.location.lat();
-    const lng = autocomplete.getPlace().geometry.location.lng();
-    setCoords({ lat, lng });
+    if (autocomplete !== null) {
+      const place = autocomplete.getPlace();
+      if (place.geometry) {
+        const lat = place.geometry.location.lat();
+        const lng = place.geometry.location.lng();
+        setCoords({ lat, lng });
+      }
+    }
   };
 
   const handleItenorySection = () => {
@@ -126,8 +134,10 @@ const App = () => {
             places={filteredPlaces.length ? filteredPlaces : places}
           />
         </Grid>
-        <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' ,width:'4vw'}}>
-          <Button variant="contained" color="primary" onClick={handleItenorySection}>Create Itinerary</Button>
+        <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width:'4vw'}}>
+          <Button variant="contained" color="primary" onClick={handleItenorySection}>
+            Create Itinerary
+          </Button>
         </Grid>
       </Grid>
     </div>

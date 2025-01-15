@@ -2,31 +2,44 @@
 
 const express = require('express');
 const cors = require('cors');
-const { connectMongoDb } = require('./src/views/connection');
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
 const loginRouter = require('./src/routes/login.route');
 const handleUserApi = require('./src/routes/user.api.route');
-const userProfileRoute = require('./src/routes/user.api.route'); // Import the userProfileRoute
+
+dotenv.config();
 
 const app = express();
-const port = 3001;
+const port = process.env.PORT || 3001;
 
-// Connect to MongoDB
-connectMongoDb("mongodb://localhost:27017/BookStore")
-    .then(() => {
-        console.log('Connected to MongoDB');
-    })
-    .catch((error) => {
-        console.error('Error connecting to MongoDB:', error);
-    });
+// MongoDB Connection
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => console.log('Connected to MongoDB Atlas'))
+.catch((error) => console.error('Error connecting to MongoDB:', error));
 
-const allowedOrigins = ['http://localhost:3000']; // Update the port if needed
-app.use(cors());
+// Middleware
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true
+}));
 app.use(express.json());
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  if (err.name === 'ClerkError') {
+    return res.status(401).json({ error: 'Authentication failed' });
+  }
+  res.status(500).json({ error: 'Something went wrong!' });
+});
 
 // Routes
 app.use("/user", loginRouter);
-app.use("/user/api", handleUserApi); // Mount the userProfileRoute handler
+app.use("/user/api", handleUserApi);
 
 app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+  console.log(`Server running on port ${port}`);
 });

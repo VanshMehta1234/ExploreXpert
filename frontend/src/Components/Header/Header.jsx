@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaBars } from 'react-icons/fa';
-import axios from 'axios';
+import { useClerk, UserButton } from '@clerk/clerk-react';
 import Logo from '../Assets/output-onlinepngtools.png';
-import ProfileIcon from '../Assets/profile-icon.png';
-import { toast} from 'react-toastify';
 import './Header.css';
 
 function Header() {
-  const [username, setUsername] = useState(null);
+  const { user, signOut } = useClerk();
   const [showNav, setShowNav] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const navigate = useNavigate();
 
   useEffect(() => {
     function handleResize() {
@@ -20,49 +19,13 @@ function Header() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  useEffect(() => {
-    async function fetchUsername() {
-      try {
-        const token = localStorage.getItem('token');
-        if (token) {
-          const response = await axios.post('http://localhost:3001/user/getUsername', { token });
-          setUsername(response.data.username);
-        }
-      } catch (error) {
-        console.error('Error fetching username:', error);
-      }
-    }
-    fetchUsername();
-  }, []);
-
   const handleToggleNav = () => {
     setShowNav(!showNav);
   };
 
-  const handleLogout = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        console.error('No token found');
-        return;
-      }
-  
-      const response = await axios.post('http://localhost:3001/user/logout', { token });
-  
-      if (response.status === 200) {
-        console.log('Logout Successful');
-        toast.success('Logout successful');
-        localStorage.removeItem('token');
-        window.location.href = '/main'; // Remove token from local storage upon successful logout
-      } else {
-        console.error('Logout failed:', response.data.message);
-        toast.error('Logout failed');
-      }
-    } catch (error) {
-      console.error('Error logging out:', error);
-    }
+  const handleSignIn = () => {
+    navigate('/sign-in');
   };
-  
 
   return (
     <div className="d-flex h3 flex-wrap align-items-center justify-content-between">
@@ -86,26 +49,36 @@ function Header() {
         </ul>
       </div>
 
-      {windowWidth >= 768 ? (
+      {windowWidth >= 768 && (
         <div className='header-font d-flex align-items-center justify-content-center'>
-          {username && <p className="text-white mx-2">{username}</p>}
-          {!username ? (
-            <Link to="/login" className="button1">Sign In</Link>
+          {user ? (
+            <UserButton 
+              afterSignOutUrl="/Home"
+              appearance={{
+                elements: {
+                  userButtonAvatarBox: {
+                    width: '40px',
+                    height: '40px'
+                  }
+                }
+              }}
+            />
           ) : (
-            <div className="dropdown">
-              <button type="button" data-bs-toggle="dropdown" aria-expanded="false" style={{ background: 'transparent' }}>
-                <img src={ProfileIcon} alt="Profile Icon" className="profile-icon1" />
-              </button>
-              <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <li><Link to="/profile" className="dropdown-item">Profile</Link></li>
-                <li><button className="dropdown-item" onClick={handleLogout}>Logout</button></li>
-              </ul>
-            </div>
+            <button 
+              onClick={handleSignIn}
+              className="button1" 
+              style={{ 
+                textDecoration: 'none',
+                border: 'none',
+                background: 'transparent',
+                cursor: 'pointer'
+              }}
+            >
+              Sign In
+            </button>
           )}
-          
         </div>
-      ) : null}
-
+      )}
     </div>
   );
 }

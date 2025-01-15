@@ -6,11 +6,22 @@ import email_icon from '../Assets/email.png';
 import { toast } from 'react-toastify'; // Remove ToastContainer import
 import 'react-toastify/dist/ReactToastify.css'; // Remove ToastContainer CSS import
 import Header from '../Header/Header1.jsx';
+import { useUser } from '@clerk/clerk-react';
+
 export default function Profile() {
+  const { user } = useUser();
   const [userData, setUserData] = useState(null);
   const [isEditMode, setIsEditMode] = useState(false);
   const [editedUsername, setEditedUsername] = useState('');
   const [editedEmail, setEditedEmail] = useState('');
+
+  useEffect(() => {
+    if (user) {
+      // Use user.id for Clerk's userId
+      // Use user.primaryEmailAddress.emailAddress for email
+      // Use user.fullName for name
+    }
+  }, [user]);
 
   useEffect(() => {
     fetchProfileData();
