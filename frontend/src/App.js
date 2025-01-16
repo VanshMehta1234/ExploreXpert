@@ -8,6 +8,7 @@ import Home from './Components/NewHome4/Home';
 import MainContent from './Components/NewHome2/MainContent';
 import MyMap from './components1/TravelAdvisor/TravelAdvisor';
 import Profile from './Components/Profile/Profile';
+import ExploreHome from './pages/ExploreHome/ExploreHome';
 import { MyContext } from './Components/ReactContext.js';
 import ItonoryCreation from './Components/Itenory/Main.js';
 import PDFGenrator from './Components/PDFCreation/PDFCreation.js';
@@ -64,9 +65,7 @@ function App() {
               <Route 
                 path="/" 
                 element={
-                  <SignedIn>
-                    <MainContent />
-                  </SignedIn>
+                    <ExploreHome />
                 } 
               />
               <Route path="/Home" element={<MainContent />} />
